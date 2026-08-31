@@ -349,6 +349,18 @@ app.get('/api/health', (_req: Request, res: Response) => {
     database,
   });
 });
+app.get('/api/contributors/:address/pledges', async (req: Request, res: Response) => {
+  const { address } = req.params;
+  const pagination = parsePledgeListPaginationQuery(req.query);
+  const result = await listContributorPledges(address, pagination);
+  res.setHeader('X-Total-Count', String(result.total));
+  res.json({
+    pledges: result.pledges,
+    page: pagination.page,
+    limit: pagination.limit,
+    total: result.total,
+  });
+});
 
 app.get('/api/health/deep', applyRateLimit(1000), async (_req: Request, res: Response) => {
   try {
