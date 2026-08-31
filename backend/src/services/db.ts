@@ -196,7 +196,7 @@ function migrate(database: SQLiteDatabase): void {
     );
 
     CREATE INDEX IF NOT EXISTS idx_pledges_campaign_id ON pledges(campaign_id);
-    CREATE INDEX IF NOT EXISTS idx_pledges_contributor ON pledges(contributor, created_at);
+    CREATE INDEX IF NOT EXISTS idx_pledges_contributor ON pledges(contributor, created_at, id);
     CREATE INDEX IF NOT EXISTS idx_campaign_events_campaign_id ON campaign_events(campaign_id);
     CREATE INDEX IF NOT EXISTS idx_campaign_events_timestamp ON campaign_events(timestamp);
     CREATE INDEX IF NOT EXISTS idx_comments_campaign_id ON campaign_comments(campaign_id);
