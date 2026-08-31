@@ -38,6 +38,7 @@ import {
   initCampaignStore,
   listCampaignPledges,
   listCampaigns,
+  listContributorPledges,
   listComments,
   type ListCampaignsOptions,
   reconcileOnChainPledge,
@@ -754,6 +755,33 @@ app.get('/api/campaigns/:id/contributors', (req: Request, res: Response) => {
 
   const summary = getContributorSummary(parsedId.value);
   res.json({ data: summary });
+});
+
+app.get('/api/contributors/:address/pledges', (req: Request, res: Response) => {
+  const { address } = req.params;
+  const paginationResult = parsePledgeListPaginationQuery({
+    page: req.query.page,
+    limit: req.query.limit,
+  });
+  if (!paginationResult.ok) {
+    sendValidationError(paginationResult.issues);
+  }
+
+  const { pledges, totalCount } = listContributorPledges(address, {
+    page: paginationResult.page,
+    limit: paginationResult.limit,
+  });
+
+  res.setHeader('X-Total-Count', String(totalCount));
+  res.json({
+    data: pledges,
+    pagination: {
+      total: totalCount,
+      page: paginationResult.page,
+      limit: paginationResult.limit,
+      totalPages: Math.max(1, Math.ceil(totalCount / paginationResult.limit)),
+    },
+  });
 });
 
 app.get('/api/campaigns/:id/history', (req: Request, res: Response) => {
