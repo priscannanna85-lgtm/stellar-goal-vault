@@ -378,6 +378,22 @@ export function parseContributorPledgesQuery(params: {
   };
 }
 
+export const contributorPledgeSchema = z.object({
+  campaignId: campaignIdSchema,
+  campaignName: z.string(),
+  status: z.enum(['open', 'funded', 'claimed', 'failed']),
+  amount: positiveAmountSchema,
+  assetCode: assetCodeSchema,
+  refundedAt: unixTimestampSchema.nullable().optional(),
+});
+
+export const contributorPledgesResponseSchema = z.object({
+  pledges: z.array(contributorPledgeSchema),
+  page: z.number(),
+  limit: z.number(),
+  total: z.number(),
+});
+
 function parseIso8601Timestamp(value: unknown): number | null {
   if (typeof value !== 'string') {
     return null;
