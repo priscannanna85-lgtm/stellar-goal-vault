@@ -799,7 +799,9 @@ registry.registerPath({
   path: '/api/contributors/{address}/pledges',
   tags: ['Contributors'],
   summary: 'List pledges by contributor',
-  description: 'Returns all pledges made by a contributor address across all campaigns.',
+  description:
+    'Returns all pledges made by a contributor address across all campaigns. ' +
+    'Unknown addresses return an empty array. Refunded pledges include the refundedAt timestamp.',
   request: {
     params: z.object({ address: contributorAddressParamSchema }),
     query: z.object({
